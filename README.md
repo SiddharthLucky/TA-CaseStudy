@@ -247,3 +247,9 @@ graph TD
 * User Load: User load can spike during pricing updates or promotions.
 * System Updates: The system supports rolling updates with minimal downtime.
 ---
+
+##### What is your exposure to building web applications that leverage AI/ML Models? How is the ML
+model integrated with the application? Please describe using a project you have worked on?
+
+I have a good amount of exposure in connecting the application with AI ML models which include the ChatGPT 40 and the Google Bard. previously there was a standalone API designed to send in a prompt and get back a response as Mono or a Flux. The Obtained response would be mapped to the appropriate object and then sent to the customer. There were also instances where some of the APIs that were designed leveraged Python.
+Around August for the latest Spring One commune they offered out-of-the-box support for leveraging AI services using a builder called Chatbot Builder and vector databases.
