@@ -215,3 +215,20 @@ graph TD
     Monitoring --> Grafana
 ```
 ---
+### Design Descision:
+* Spring Boot for Microservices: Modular, scalable microservices that handle different functionalities like upload, search, and edit.
+* Java 21 Virtual Threads: Used to optimize concurrency and handle high numbers of concurrent requests efficiently, especially for I/O-heavy operations like file uploads and database interactions.
+* Spring Batch for CSV Processing: Spring Batch processes large CSV files in chunks, ensuring efficient resource management and handling high volumes of data.
+* Google Cloud Storage (GCS): Selected for persisting uploaded CSV files due to its durability, scalability, and seamless integration with other GCP services.
+* Google Cloud SQL (PostgreSQL): Chosen for storing processed pricing data, offering managed relational database services with built-in high availability, scaling, and ACID compliance for data integrity.
+* Elasticsearch for Search: Implemented to enable fast, full-text search on large datasets, allowing users to search pricing records with flexible criteria.
+* Redis (GCP Memorystore): Used as a caching layer to store frequently queried search results and pricing records, reducing database load and improving response times.
+* Google Cloud Pub/Sub: Event-driven architecture that triggers real-time updates (e.g., after edits) and ensures loose coupling between microservices, making the system more scalable and maintainable.
+* API Gateway: Centralized entry point for routing requests to the appropriate microservices, simplifying communication, and enforcing consistent security policies.
+* Spring Security with OAuth 2.0 or Keycloak: Secured API endpoints with role-based access control, using OAuth 2.0 via Google Identity Platform for authentication and authorization.
+* Retry Mechanism with Spring Retry: Implemented fault-tolerance to handle transient failures, ensuring reliability in critical operations like file uploads, database transactions, or service-to-service communication.
+* Monitoring with Prometheus, Grafana, and Stackdriver: Chosen for system observability, real-time metrics collection, and alerting to ensure the system is monitored for performance, fault tolerance, and reliability.
+* Auto-scaling with Google Kubernetes Engine (GKE): Microservices are containerized and deployed on GKE, allowing the system to scale up or down automatically based on load, ensuring resilience and resource optimization.
+* Cache Invalidation: Ensured that the cache is invalidated after data updates to prevent serving stale data, particularly important for edit operations involving Redis and the search service.
+
+---
