@@ -223,7 +223,7 @@ graph TD
 * Google Cloud SQL (PostgreSQL): Storing processed pricing data, relational database high availability, scaling, and ACID compliance.
 * Elasticsearch for Search: Implemented to enable fast, full-text search on large datasets, allowing users to search pricing records with flexible criteria.
 * Redis (GCP Memorystore): Used as a caching layer to store frequently queried search results and pricing records, reducing database load and improving response times.
-* Google Cloud Pub/Sub: Event-driven architecture that triggers real-time updates, ensures loose coupling between microservices, making it more scalable and maintainable.
+* Google Cloud Pub/Sub: Event-driven architecture that triggers real-time updates, and ensures loose coupling between microservices, making it more scalable and maintainable.
 * API Gateway: Centralized entry point for routing requests to the appropriate microservices, simplifying communication, and enforcing consistent security policies.
 * Spring Security with OAuth 2.0 or Keycloak: Secured API endpoints with role-based access control, using OAuth 2.0 via Google Identity Platform for authentication and authorization or Keycloak can be leveraged for OpenID auth.
 * Retry Mechanism with Spring Retry: Implemented fault tolerance to handle transient failures, ensuring reliability in critical operations like file uploads, database transactions, or service-to-service communication.
@@ -248,8 +248,7 @@ graph TD
 * System Updates: The system supports rolling updates with minimal downtime.
 ---
 
-##### What is your exposure to building web applications that leverage AI/ML Models? How is the ML
-model integrated with the application? Please describe using a project you have worked on?
+#### What is your exposure to building web applications that leverage AI/ML Models? How is the ML model integrated with the application? Please describe using a project you have worked on.
 
 I have a good amount of exposure in connecting the application with AI ML models which include the ChatGPT 40 and the Google Bard. previously there was a standalone API designed to send in a prompt and get back a response as Mono or a Flux. The Obtained response would be mapped to the appropriate object and then sent to the customer. There were also instances where some of the APIs that were designed leveraged Python.
 Around August for the latest Spring One commune they offered out-of-the-box support for leveraging AI services using a builder called Chatbot Builder and vector databases.
