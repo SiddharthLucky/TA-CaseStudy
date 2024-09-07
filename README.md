@@ -220,15 +220,30 @@ graph TD
 * Java 21 Virtual Threads: Used to optimize concurrency and handle high numbers of concurrent requests efficiently, especially for I/O-heavy operations like file uploads and database interactions.
 * Spring Batch for CSV Processing: Spring Batch processes large CSV files in chunks, ensuring efficient resource management and handling high volumes of data.
 * Google Cloud Storage (GCS): Selected for persisting uploaded CSV files due to its durability, scalability, and seamless integration with other GCP services.
-* Google Cloud SQL (PostgreSQL): Chosen for storing processed pricing data, offering managed relational database services with built-in high availability, scaling, and ACID compliance for data integrity.
+* Google Cloud SQL (PostgreSQL): Storing processed pricing data, relational database high availability, scaling, and ACID compliance.
 * Elasticsearch for Search: Implemented to enable fast, full-text search on large datasets, allowing users to search pricing records with flexible criteria.
 * Redis (GCP Memorystore): Used as a caching layer to store frequently queried search results and pricing records, reducing database load and improving response times.
-* Google Cloud Pub/Sub: Event-driven architecture that triggers real-time updates (e.g., after edits) and ensures loose coupling between microservices, making the system more scalable and maintainable.
+* Google Cloud Pub/Sub: Event-driven architecture that triggers real-time updates, ensures loose coupling between microservices, making it more scalable and maintainable.
 * API Gateway: Centralized entry point for routing requests to the appropriate microservices, simplifying communication, and enforcing consistent security policies.
-* Spring Security with OAuth 2.0 or Keycloak: Secured API endpoints with role-based access control, using OAuth 2.0 via Google Identity Platform for authentication and authorization.
-* Retry Mechanism with Spring Retry: Implemented fault-tolerance to handle transient failures, ensuring reliability in critical operations like file uploads, database transactions, or service-to-service communication.
-* Monitoring with Prometheus, Grafana, and Stackdriver: Chosen for system observability, real-time metrics collection, and alerting to ensure the system is monitored for performance, fault tolerance, and reliability.
-* Auto-scaling with Google Kubernetes Engine (GKE): Microservices are containerized and deployed on GKE, allowing the system to scale up or down automatically based on load, ensuring resilience and resource optimization.
+* Spring Security with OAuth 2.0 or Keycloak: Secured API endpoints with role-based access control, using OAuth 2.0 via Google Identity Platform for authentication and authorization or Keycloak can be leveraged for OpenID auth.
+* Retry Mechanism with Spring Retry: Implemented fault tolerance to handle transient failures, ensuring reliability in critical operations like file uploads, database transactions, or service-to-service communication.
+* Monitoring with Prometheus, Grafana, and Google Observability: Chosen for system observability, real-time metrics collection, and alerting to ensure the system is monitored for performance, fault tolerance, and reliability.
+* Auto-scaling with Google Kubernetes Engine (GKE): Microservices are containerized and deployed on GKE, allowing the system to scale up or down automatically based on load, ensuring resilience and resource optimization in case we need granular orchestration.
 * Cache Invalidation: Ensured that the cache is invalidated after data updates to prevent serving stale data, particularly important for edit operations involving Redis and the search service.
-
+---
+### Assumptions:
+* Data Volume: The pricing data is large but manageable within Google Cloud SQL.
+* Upload Frequency: CSV uploads are periodic, not real-time.
+* File Format: Pricing data is consistently uploaded in a standardized CSV format.
+* Search: Search requirements are limited to exact or full-text queries.
+* Concurrency: The system handles moderate to high concurrency using Java 21 virtual threads.
+* Real-time Updates: Real-time updates are mainly needed for the search service.
+* Scalability: The system must scale to handle 3,000 stores and traffic spikes.
+* Consistency: Eventual consistency is acceptable between the database and Elasticsearch.
+* Security: Role-based access control is required for different user roles.
+* Cache TTL: Cache entries expire after a set TTL to avoid serving stale data.
+* GCP Integration: The solution assumes GCP is the cloud platform.
+* Error Tolerance: Transient errors are handled with retry mechanisms.
+* User Load: User load can spike during pricing updates or promotions.
+* System Updates: The system supports rolling updates with minimal downtime.
 ---
