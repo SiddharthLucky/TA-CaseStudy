@@ -90,5 +90,128 @@ AWS, GCP, Terraform for infrastructure setup.
 #### 4. Monitoring Observavability
 Spring Actuator, Prometheus - for cloud-native monitoring, Grafana.
 
-#### %. Compliance
+#### 5. Compliance
 GDPR compliance - consent for data processing, Timely backups for cloud SQL.
+
+---
+### Context Diagram: 
+
+```mermaid
+graph TB
+    subgraph User
+        U1[Upload_CSV]
+        U2[Search_Records]
+        U3[Edit_Records]
+    end
+    
+    subgraph Backend_Microservices [Backend Microservices]
+        A1[Upload_Service_Spring_Boot]
+        A2[Batch_Processing_Spring_Batch_Java_21_Virtual_Threads]
+        A3[Search_Service_Elasticsearch]
+        A4[Edit_Service_Spring_Boot]
+    end
+    
+    subgraph GCP [Google Cloud Platform]
+        GCS[Google_Cloud_Storage]
+        GCSQL[Google_Cloud_SQL_PostgreSQL]
+        Redis[Redis_GCP_Memorystore]
+        PubSub[Google_Cloud_Pub_Sub]
+    end
+
+    U1 --> A1
+    A1 --> GCS
+    GCS --> A2
+    A2 --> GCSQL
+    A3 --> GCSQL
+    A3 --> Redis
+    U2 --> A3
+    U3 --> A4
+    A4 --> GCSQL
+    A4 --> PubSub
+    PubSub --> A3
+```
+---
+### Solution Architechture:
+
+```mermaid
+graph TD
+    subgraph User_Interface [User Interface]
+        UI1[Upload CSV]
+        UI2[Search Records]
+        UI3[Edit Records]
+    end
+
+    subgraph API_Gateway [API Gateway]
+        APIG1[REST API Gateway]
+    end
+
+    subgraph Upload_Service [Upload Service]
+        US1[CSV Validation]
+        US2[Persist to GCS]
+        US3[Trigger Batch Processing]
+    end
+
+    subgraph Batch_Processing_Service [Batch Processing Service]
+        BP1[Spring Batch]
+        BP2[Java 21 Virtual Threads]
+        BP3[Chunk Processing]
+    end
+
+    subgraph Search_Service [Search Service]
+        SS1[Elasticsearch Queries]
+        SS2[Redis Cache for Fast Access]
+    end
+
+    subgraph Edit_Service [Edit Service]
+        ES1[Update Pricing Data]
+        ES2[Invalidate Redis Cache]
+        ES3[Pub/Sub Event for Real-time Update]
+    end
+
+    subgraph GCP [Google Cloud Platform]
+        GCS[Google Cloud Storage]
+        GCSQL[Google Cloud SQL_PostgreSQL]
+        Redis[Redis_GCP Memorystore]
+        PubSub[Google Cloud Pub/Sub]
+    end
+
+    subgraph Monitoring [Monitoring and Observability]
+        Prometheus[Prometheus]
+        Grafana[Grafana]
+    end
+
+    UI1 --> APIG1
+    UI2 --> APIG1
+    UI3 --> APIG1
+
+    APIG1 --> US1
+    US1 --> US2
+    US2 --> GCS
+    US3 --> BP1
+
+    BP1 --> BP2
+    BP2 --> BP3
+    BP3 --> GCSQL
+
+    APIG1 --> SS1
+    SS1 --> Redis
+    SS1 --> GCSQL
+    UI2 --> SS1
+
+    APIG1 --> ES1
+    ES1 --> GCSQL
+    ES2 --> Redis
+    ES3 --> PubSub
+    UI3 --> ES1
+
+    PubSub --> SS1
+
+    GCP --> GCS
+    GCP --> GCSQL
+    GCP --> Redis
+    GCP --> PubSub
+
+    Monitoring --> Prometheus
+    Monitoring --> Grafana
+```
+---
